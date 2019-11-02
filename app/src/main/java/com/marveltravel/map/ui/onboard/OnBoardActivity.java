@@ -37,8 +37,7 @@ public class OnBoardActivity extends AppCompatActivity {
         onBoardAdapter = new ViewPagerAdapter();
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(onBoardAdapter);
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.view_red, null);
-        btnNext = view.findViewById(R.id.btnNext);
+        btnNext = findViewById(R.id.btnNext);
         onNextClick();
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +68,12 @@ public class OnBoardActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (viewPager.getCurrentItem() == 3) {
-                    btnNext.setText("Finsh");
+                    btnNext.setText("Finish");
                     btnNext.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             MainActivity.start(OnBoardActivity.this);
+                            finish();
                         }
                     });
                 } else {
@@ -98,6 +98,7 @@ public class OnBoardActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_skip:
                 MainActivity.start(this);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
