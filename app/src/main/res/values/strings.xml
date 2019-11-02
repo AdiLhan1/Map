@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Map</string>
+    <string name="red"/>
+    <string name="blue"/>
+    <string name="yellow"/>
+    <string name="orange"/>
+    <string name="next">Next</string>
+</resources>
