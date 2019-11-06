@@ -5,23 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.marveltravel.map.R;
+import com.marveltravel.map.data.entity.OnBoardEntity;
 import com.marveltravel.map.ui.main.MainActivity;
 
-import java.util.zip.Inflater;
+import java.util.ArrayList;
 
 public class OnBoardActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -34,17 +31,32 @@ public class OnBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_board);
         initViews();
-        onBoardAdapter = new ViewPagerAdapter();
-        viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(onBoardAdapter);
-        btnNext = findViewById(R.id.btnNext);
         onNextClick();
+        setupClickListener();
+        setupViewPager();
+    }
+
+    private void setupClickListener() {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
             }
         });
+    }
+
+    public void setupViewPager() {
+        onBoardAdapter = new ViewPagerAdapter(getResource());
+        viewPager.setAdapter(onBoardAdapter);
+    }
+
+    private ArrayList<OnBoardEntity> getResource() {
+        ArrayList<OnBoardEntity> list = new ArrayList<>();
+        list.add(new OnBoardEntity("", R.drawable.red2));
+        list.add(new OnBoardEntity("", R.drawable.blue));
+        list.add(new OnBoardEntity("", R.drawable.orange));
+        list.add(new OnBoardEntity("", R.drawable.yellow));
+        return list;
     }
 
     public static void start(Context context) {
@@ -90,6 +102,8 @@ public class OnBoardActivity extends AppCompatActivity {
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbatTransparent);
+        viewPager = findViewById(R.id.viewPager);
+        btnNext = findViewById(R.id.btnNext);
         setSupportActionBar(toolbar);
     }
 

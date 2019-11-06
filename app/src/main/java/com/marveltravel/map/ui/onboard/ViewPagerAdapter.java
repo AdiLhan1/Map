@@ -14,49 +14,33 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.marveltravel.map.R;
+import com.marveltravel.map.data.entity.OnBoardEntity;
 import com.marveltravel.map.ui.main.MainActivity;
+
+import java.util.ArrayList;
 
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
-//    private TextView textView;
+    private ArrayList<OnBoardEntity> resource;
 
+    public ViewPagerAdapter(ArrayList<OnBoardEntity> resours) {
+        this.resource=resours;
+    }
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        context = container.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.view_red, null);
+        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.view_red, null);
         ImageView imageView = view.findViewById(R.id.red1);
 //        textView = view.findViewById(R.id.text_view);
-
+        imageView.setImageDrawable(container.getContext().getResources().getDrawable(resource.get(position).getImg()));
         Log.d("poss", position + "");
-        switch (position) {
-            case 0:
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.red2));
-//                textView.setText("В данном приложении вы можете учиться");
-                break;
-            case 1:
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.blue));
-//                textView.setText("В данном приложении вы можете обновлять");
-                break;
-            case 2:
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.yellow));
-//                textView.setText("В данном приложении вы можете удалять");
-                break;
-            case 3:
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.orange));
-//                textView.setText("Спасибо");
-                break;
-            default:
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.red2));
-//                textView.setText("Спасибо");
-        }
         container.addView(view);
         return view;
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return resource.size();
     }
 
 
