@@ -16,11 +16,7 @@
         android:layout_width="369dp"
         android:layout_height="64dp"
         android:layout_marginBottom="88dp"
-        android:background="@drawable/button"
-        android:text="Далее"
-        android:textColor="#ffffff"
-        android:textSize="25sp"
-        android:textStyle="normal"
+       style="@style/OnBoard_viewNext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

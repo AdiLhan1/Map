@@ -1,10 +1,8 @@
 package com.marveltravel.map.data.network;
 
-import android.graphics.Canvas;
 
 import com.marveltravel.map.data.entity.weatherforecast.ForecastWeatherEntity;
 import com.marveltravel.map.data.entity.wheather.CurrentWeatherEntity;
-import com.marveltravel.map.data.network.ApiEndpoints;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

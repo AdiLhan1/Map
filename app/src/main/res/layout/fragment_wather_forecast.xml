@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".data.entity.weatherforecast.WeatherForecast">
+    tools:context=".data.entity.weatherforecast.WeatherForecastFragment">
 
     <!-- TODO: Update blank fragment layout -->
    <LinearLayout
@@ -17,27 +17,21 @@
        >
     <TextView
         android:text="5 DAYS WEATHER FORECAST"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
+       style="@style/Forecast_textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
     <TextView
         android:id="@+id/text_city_name"
-        android:text="Weather in Bishke,KG"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
+        android:text="Weather in Bishkek,KG"
+        style="@style/Forecast_textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
     <TextView
         android:id="@+id/text_geo_coord"
         android:text="[35.42"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="@color/colorPrimary"
+        style="@style/Forecast_textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />

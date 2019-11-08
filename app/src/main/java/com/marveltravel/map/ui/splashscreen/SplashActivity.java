@@ -2,7 +2,6 @@ package com.marveltravel.map.ui.splashscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -33,9 +32,9 @@ public class SplashActivity extends AppCompatActivity {
             App.getPreferences().setFirstLaunch();
             OnBoardActivity.start(this);
         }else {
-//            OnBoardActivity.start(this);
             MainActivity.start(this);
         }
+        overridePendingTransition(R.anim.slide_in,R.anim.slide_out);
         finish();
     }
 }
