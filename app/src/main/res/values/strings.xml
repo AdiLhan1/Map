@@ -5,7 +5,10 @@
     <string name="yellow" />
     <string name="orange" />
     <string name="next">Next</string>
+    <string name="image_url"></string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
+    "http://openweathermap.org/img/wn/" + weatherForecast
+    .list.get(position).weather.get(0).getIcon() + "@2x.png"

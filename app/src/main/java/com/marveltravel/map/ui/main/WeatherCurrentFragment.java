@@ -3,20 +3,18 @@ package com.marveltravel.map.ui.main;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,13 +27,15 @@ import com.marveltravel.map.R;
 import com.marveltravel.map.data.entity.weatherforecast.WeatherForecastFragment;
 import com.marveltravel.map.data.entity.wheather.CurrentWeatherEntity;
 import com.marveltravel.map.data.network.RetrofitBuilder;
+import com.marveltravel.map.ui.base.BaseFragment;
+import com.marveltravel.map.utils.DateTimeHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,32 +45,82 @@ import static com.marveltravel.map.BuildConfig.WEATHER_KEY;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WeatherCurrentFragment extends Fragment {
+public class WeatherCurrentFragment extends BaseFragment {
     private static final String SAVE_TEXT = "text_key";
 
-    TextView temp, wind, humidity, sunrise, sunset, cloudiness, pressure, date, address, maxTemp, minTemp, description;
-    private ImageView imageView, changedPlace;
+    @BindView(R.id.weather_nowTemp)
+    TextView temp;
+
+    @BindView(R.id.weather_wind)
+    TextView wind;
+
+    @BindView(R.id.weather_sunrise)
+    TextView sunrise;
+
+    @BindView(R.id.weather_sunset)
+    TextView sunset;
+
+    @BindView(R.id.weather_humidity)
+    TextView humidity;
+
+    @BindView(R.id.weather_cloudiness)
+    TextView cloudiness;
+
+    @BindView(R.id.weather_pressure)
+    TextView pressure;
+
+    @BindView(R.id.weather_date)
+    TextView date;
+
+    @BindView(R.id.address)
+    TextView address;
+
+    @BindView(R.id.weather_maxTemp)
+    TextView maxTemp;
+
+    @BindView(R.id.weather_minTemp)
+    TextView minTemp;
+
+    @BindView(R.id.weather_description)
+    TextView description;
+
+    @BindView(R.id.weather_imageview)
+    ImageView imageView;
+
+    @BindView(R.id.change_place)
+    ImageView changedPlace;
+
+    @BindView(R.id.linearLayout)
+    LinearLayout linearLayout;
+
+    @BindView(R.id.consts)
+    ConstraintLayout constraintLayout;
+
+    @BindView(R.id.bottom_sheet)
+    View view1;
+
     public String youEditTextValue;
     private String countryText = "Bishkek";
     private SharedPreferences preferences;
     private BottomSheetBehavior bottomSheetBehavior;
-    private LinearLayout linearLayout;
-    private ConstraintLayout constraintLayout;
+
     public WeatherCurrentFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_weather, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initView(view);
         onClick();
         loadText();
         showCurrenWeather();
         openForecast();
-        return view;
+    }
+
+    @Override
+    protected int getViewLayout() {
+        return R.layout.fragment_weather;
     }
 
     private void onClick() {
@@ -101,31 +151,14 @@ public class WeatherCurrentFragment extends Fragment {
     }
 
     private void initView(View view) {
-        temp = view.findViewById(R.id.weather_nowTemp);
-        wind = view.findViewById(R.id.weather_wind);
-        sunrise = view.findViewById(R.id.weather_sunrise);
-        sunset = view.findViewById(R.id.weather_sunset);
-        humidity = view.findViewById(R.id.weather_humidity);
-        cloudiness = view.findViewById(R.id.weather_cloudiness);
-        pressure = view.findViewById(R.id.weather_pressure);
-        date = view.findViewById(R.id.weather_date);
-        address = view.findViewById(R.id.address);
-        maxTemp = view.findViewById(R.id.weather_maxTemp);
-        minTemp = view.findViewById(R.id.weather_minTemp);
-        description = view.findViewById(R.id.weather_description);
-        imageView = view.findViewById(R.id.weather_imageview);
-        linearLayout = view.findViewById(R.id.linearLayout);
-        constraintLayout = view.findViewById(R.id.consts);
-        changedPlace = view.findViewById(R.id.change_place);
-        View view1 = view.findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(view1);
-
     }
-    public void sendCodeCountry(){
-        if (youEditTextValue!=null) {
+
+    public void sendCodeCountry() {
+        if (youEditTextValue != null) {
             Bundle bundle = new Bundle();
             bundle.putString("key", youEditTextValue);
-            WeatherForecastFragment forecastFragment=new WeatherForecastFragment();
+            WeatherForecastFragment forecastFragment = new WeatherForecastFragment();
             forecastFragment.setArguments(bundle);
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -195,6 +228,7 @@ public class WeatherCurrentFragment extends Fragment {
 
 
     }
+
     private void showCurrenWeather() {
         RetrofitBuilder.getInstance().getCurrentweather(countryText, WEATHER_KEY, "metric")
                 .enqueue(new Callback<CurrentWeatherEntity>() {
@@ -212,26 +246,17 @@ public class WeatherCurrentFragment extends Fragment {
                             Glide.with((getContext())).load("http://openweathermap.org/img/wn/" + response.body().
                                     getWeather().get(0).getIcon() + "@2x.png").centerCrop().into(imageView);
                             description.setText(data.getWeather().get(0).getDescription());
-                            DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-                            Date date1 = new Date();
-                            Date date2 = new Date();
-                            date1.setTime((long) data.getSys().getSunrise() * 1000);
-                            date2.setTime((long) data.getSys().getSunset() * 1000);
-                            String daty = dateFormat.format(date1.getTime());
-                            String daty1 = dateFormat.format(date2.getTime());
-                            sunrise.setText(daty);
-                            sunset.setText(daty1);
-                            Calendar cal = Calendar.getInstance();
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-YYYY Время:HH:MM");
-                            String format = sdf.format(cal.getTime());
-                            date.setText(format);
+
+                            sunrise.setText(DateTimeHelper.parseDateToTime(data.getSys().getSunrise()));
+                            sunset.setText(DateTimeHelper.parseDateToTime( data.getSys().getSunset()));
+                            date.setText(DateTimeHelper.getCurrentDateTime());
                             cloudiness.setText(data.getClouds().getAll());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<CurrentWeatherEntity> call, Throwable t) {
-                        Log.d("TAG", "onFailure: ");
+
                     }
                 });
     }
