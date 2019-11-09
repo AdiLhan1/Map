@@ -144,6 +144,7 @@ public class WeatherCurrentFragment extends Fragment {
                         linearLayout.setVisibility(View.INVISIBLE);
                         constraintLayout.setVisibility(View.INVISIBLE);
                         WeatherForecastFragment weatherForecastFragment = new WeatherForecastFragment();
+                        sendCodeCountry();
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .add(R.id.container2, weatherForecastFragment)
                                 .addToBackStack(null)

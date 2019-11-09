@@ -41,6 +41,7 @@ public class WeatherForecastFragment extends Fragment {
     private TextView txt_city_name, txt_geo_coord;
     private RecyclerView recycler_forecast;
     private String strText;
+    private  String country="Bishkek";
     private static final String TAG = "loge_tag";
 
 
@@ -79,7 +80,6 @@ public class WeatherForecastFragment extends Fragment {
             if (strText != null) {
                 txt_city_name.setText(strText);
                 saveText();
-                loadText();
             }
         }
 
@@ -103,6 +103,7 @@ public class WeatherForecastFragment extends Fragment {
             ed.putString(SAVE_TEXT, txt_city_name.getText().toString());
             Log.e(TAG, "saveText: " + strText);
             ed.apply();
+            country=strText;
         }
     }
 
@@ -112,19 +113,19 @@ public class WeatherForecastFragment extends Fragment {
         }if (txt_city_name!=null) {
             String savedText = preferences.getString(SAVE_TEXT, "");
             Log.e(TAG, "loadText: " + savedText);
-            txt_city_name.setText(strText);
+            txt_city_name.setText(savedText);
+            country=savedText;
         }
     }
 
 
     private void getForecastWeatherInfo() {
-        RetrofitBuilder.getInstance().getForecastweather(strText, WEATHER_KEY, "metric")
+        RetrofitBuilder.getInstance().getForecastweather(country, WEATHER_KEY, "metric")
                 .enqueue(new Callback<ForecastWeatherEntity>() {
                     @Override
                     public void onResponse(Call<ForecastWeatherEntity> call, Response<ForecastWeatherEntity> response) {
                         if (response.body() != null) {
                             displayForecastWeather(response.body());
-                            getCountryText();
                             Log.e(TAG, "getForecastWeather: " + strText);
                         }
                     }
@@ -138,7 +139,7 @@ public class WeatherForecastFragment extends Fragment {
 
     private void displayForecastWeather(ForecastWeatherEntity weatherEntity) {
 //        txt_city_name.setText(new StringBuilder(weatherEntity.city.name));
-        txt_city_name.setText(strText);
+        txt_city_name.setText(country);
         txt_geo_coord.setText(new StringBuilder("[").append(weatherEntity.city.coord + "]"));
 //        weatherEntity.list.get(0).rain
 
