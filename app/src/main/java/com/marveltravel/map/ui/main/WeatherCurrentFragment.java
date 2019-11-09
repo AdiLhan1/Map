@@ -56,6 +56,7 @@ public class WeatherCurrentFragment extends Fragment {
     private BottomSheetBehavior bottomSheetBehavior;
     private LinearLayout linearLayout;
     private ConstraintLayout constraintLayout;
+
     public WeatherCurrentFragment() {
         // Required empty public constructor
     }
@@ -119,13 +120,16 @@ public class WeatherCurrentFragment extends Fragment {
         changedPlace = view.findViewById(R.id.change_place);
         View view1 = view.findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(view1);
+        bottomSheetBehavior.setPeekHeight(150);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
     }
-    public void sendCodeCountry(){
-        if (youEditTextValue!=null) {
+
+    public void sendCodeCountry() {
+        if (youEditTextValue != null) {
             Bundle bundle = new Bundle();
             bundle.putString("key", youEditTextValue);
-            WeatherForecastFragment forecastFragment=new WeatherForecastFragment();
+            WeatherForecastFragment forecastFragment = new WeatherForecastFragment();
             forecastFragment.setArguments(bundle);
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -146,9 +150,9 @@ public class WeatherCurrentFragment extends Fragment {
                         WeatherForecastFragment weatherForecastFragment = new WeatherForecastFragment();
                         sendCodeCountry();
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container2, weatherForecastFragment)
+                                .replace(R.id.container2, weatherForecastFragment)
                                 .addToBackStack(null)
-                                .commit();
+                                .commitAllowingStateLoss();
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         imageView.setVisibility(View.VISIBLE);
@@ -184,7 +188,6 @@ public class WeatherCurrentFragment extends Fragment {
     }
 
     private void loadText() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         }
@@ -192,9 +195,8 @@ public class WeatherCurrentFragment extends Fragment {
         Log.e("TAG", "loadText: " + savedText);
         address.setText(savedText);
         countryText = savedText;
-
-
     }
+
     private void showCurrenWeather() {
         RetrofitBuilder.getInstance().getCurrentweather(countryText, WEATHER_KEY, "metric")
                 .enqueue(new Callback<CurrentWeatherEntity>() {
