@@ -13,6 +13,10 @@ android {
         buildConfigField "String", "WEATHER_KEY", "\"${weather_key}\""
         buildConfigField "String", "WEATHER_BASE_URL", "\"${base_url_weather}\""
 
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
 
     }
     buildTypes {

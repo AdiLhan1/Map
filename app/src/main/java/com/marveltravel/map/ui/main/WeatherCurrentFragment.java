@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -111,6 +112,7 @@ public class WeatherCurrentFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initView(view);
         onClick();
         loadText();

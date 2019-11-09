@@ -143,7 +143,7 @@ public class WeatherForecastFragment extends Fragment {
         txt_geo_coord.setText(new StringBuilder("[").append(weatherEntity.city.coord + "]"));
 //        weatherEntity.list.get(0).rain
 
-        WeatherForecastAdapter adapter = new WeatherForecastAdapter(getContext(), weatherEntity);
+        WeatherForecastAdapter adapter = new WeatherForecastAdapter(weatherEntity);
         recycler_forecast.setAdapter(adapter);
     }
 

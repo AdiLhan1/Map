@@ -13,40 +13,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.marveltravel.map.R;
 import com.marveltravel.map.data.entity.weatherforecast.ForecastWeatherEntity;
+import com.marveltravel.map.data.entity.weatherforecast.MyList;
 import com.marveltravel.map.utils.DateTimeHelper;
+import com.marveltravel.map.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastAdapter.MyViewHolder> {
-    Context context;
-    ForecastWeatherEntity weatherForecast;
+    private Context context;
+    private ForecastWeatherEntity weatherForecast;
 
-    public WeatherForecastAdapter(Context context, ForecastWeatherEntity weatherForecast) {
-        this.context = context;
+    public WeatherForecastAdapter(ForecastWeatherEntity weatherForecast) {
         this.weatherForecast = weatherForecast;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_weather_forecast, parent, false);
+        View itemView = LayoutInflater.from(context = parent.getContext()).inflate(R.layout.item_weather_forecast, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Glide.with((context)).load("http://openweathermap.org/img/wn/" + weatherForecast
-                .list.get(position).weather.get(0).getIcon() + "@2x.png").centerCrop().into(holder.img_weather);
-
+        MyList item = weatherForecast.list.get(position);
+        Glide.with((context)).load(StringUtils.getImageUrl(context, item))
+                .centerCrop()
+                .into(holder.img_weather);
         holder.txt_data_time.setText(DateTimeHelper.getCurrentDateTime());
-
-        holder.txt_desciption.setText(new StringBuilder(weatherForecast.list.get(position)
-                .weather.get(0).getDescription()));
-        holder.txt_temperature.setText(new StringBuilder(String.valueOf(weatherForecast.list.get(position)
-                .main.getTemp())));
-        holder.maxTemp.setText((String.valueOf(weatherForecast.list.get(position).main.getTemp_max())));
-        holder.minTemp.setText((String.valueOf(weatherForecast.list.get(position).main.getTemp_min())));
+        holder.txt_desciption.setText((item.weather.get(0).getDescription()));
+        holder.txt_temperature.setText(String.valueOf(item.main.getTemp()));
+        holder.maxTemp.setText((String.valueOf(item.main.getTemp_max())));
+        holder.minTemp.setText((String.valueOf(item.main.getTemp_min())));
     }
 
     @Override
