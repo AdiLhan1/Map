@@ -45,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="490dp"
             android:background="#ffffff"
-            app:behavior_hideable="true"
             app:behavior_peekHeight="55dp"
             app:layout_behavior="@string/bottom_sheet_behavior">
             <LinearLayout
