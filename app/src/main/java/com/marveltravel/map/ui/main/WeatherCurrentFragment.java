@@ -154,6 +154,9 @@ public class WeatherCurrentFragment extends BaseFragment {
 
     private void initView(View view) {
         bottomSheetBehavior = BottomSheetBehavior.from(view1);
+        bottomSheetBehavior.setPeekHeight(150);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
     }
 
     public void sendCodeCountry() {
@@ -181,9 +184,9 @@ public class WeatherCurrentFragment extends BaseFragment {
                         WeatherForecastFragment weatherForecastFragment = new WeatherForecastFragment();
                         sendCodeCountry();
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container2, weatherForecastFragment)
+                                .replace(R.id.container2, weatherForecastFragment)
                                 .addToBackStack(null)
-                                .commit();
+                                .commitAllowingStateLoss();
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         imageView.setVisibility(View.VISIBLE);
@@ -219,7 +222,6 @@ public class WeatherCurrentFragment extends BaseFragment {
     }
 
     private void loadText() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         }
@@ -227,8 +229,6 @@ public class WeatherCurrentFragment extends BaseFragment {
         Log.e("TAG", "loadText: " + savedText);
         address.setText(savedText);
         countryText = savedText;
-
-
     }
 
     private void showCurrenWeather() {

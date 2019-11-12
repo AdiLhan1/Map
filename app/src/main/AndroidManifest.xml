@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="portrait"
             android:clearTaskOnLaunch="true">
 

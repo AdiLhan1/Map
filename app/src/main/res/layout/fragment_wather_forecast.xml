@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#03A9F4"
     tools:context=".data.entity.weatherforecast.WeatherForecastFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -40,7 +40,7 @@
             android:id="@+id/recyler_forecast"
             android:layout_below="@+id/main_info"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

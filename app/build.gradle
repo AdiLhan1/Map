@@ -12,6 +12,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "WEATHER_KEY", "\"${weather_key}\""
         buildConfigField "String", "WEATHER_BASE_URL", "\"${base_url_weather}\""
+        buildConfigField "String", "CURRENCY_KEY", "\"${currency_key}\""
+        buildConfigField "String", "CURRENCY_BASE_URL", "\"${base_url_currency}\""
 
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
