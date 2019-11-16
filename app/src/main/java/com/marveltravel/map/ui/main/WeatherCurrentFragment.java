@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,7 +100,8 @@ public class WeatherCurrentFragment extends BaseFragment {
 
     @BindView(R.id.bottom_sheet)
     View view1;
-
+    @BindView(R.id.progressBar1)
+    ProgressBar progressBar;
     public String youEditTextValue;
     private String countryText = "Bishkek";
     private SharedPreferences preferences;
@@ -112,7 +114,6 @@ public class WeatherCurrentFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initView(view);
         onClick();
         loadText();
@@ -172,6 +173,7 @@ public class WeatherCurrentFragment extends BaseFragment {
         }
     }
 
+
     private void openForecast() {
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -187,6 +189,7 @@ public class WeatherCurrentFragment extends BaseFragment {
                                 .replace(R.id.container2, weatherForecastFragment)
                                 .addToBackStack(null)
                                 .commitAllowingStateLoss();
+                        progressBar.setVisibility(View.INVISIBLE);
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         imageView.setVisibility(View.VISIBLE);
@@ -211,12 +214,13 @@ public class WeatherCurrentFragment extends BaseFragment {
     private void saveText() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
+        }if (address!=null) {
+            SharedPreferences.Editor ed = preferences.edit();
+            String text = address.getText().toString();
+            ed.putString(SAVE_TEXT, text);
+            Log.e("TAG", "saveText: " + youEditTextValue);
+            ed.apply();
         }
-        SharedPreferences.Editor ed = preferences.edit();
-        String text = address.getText().toString();
-        ed.putString(SAVE_TEXT, text);
-        Log.e("TAG", "saveText: " + youEditTextValue);
-        ed.apply();
         countryText = youEditTextValue;
 
     }
@@ -248,17 +252,17 @@ public class WeatherCurrentFragment extends BaseFragment {
                             Glide.with((getContext())).load("http://openweathermap.org/img/wn/" + response.body().
                                     getWeather().get(0).getIcon() + "@2x.png").centerCrop().into(imageView);
                             description.setText(data.getWeather().get(0).getDescription());
-
                             sunrise.setText(DateTimeHelper.parseDateToTime(data.getSys().getSunrise()));
-                            sunset.setText(DateTimeHelper.parseDateToTime( data.getSys().getSunset()));
+                            sunset.setText(DateTimeHelper.parseDateToTime(data.getSys().getSunset()));
                             date.setText(DateTimeHelper.getCurrentDateTime());
                             cloudiness.setText(data.getClouds().getAll());
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<CurrentWeatherEntity> call, Throwable t) {
-
+                        Log.e("TAG", "onFailure: ");
                     }
                 });
     }

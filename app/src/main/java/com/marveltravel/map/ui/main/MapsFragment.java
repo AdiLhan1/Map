@@ -70,7 +70,6 @@ public class MapsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getCurrency();
-        getConverterCalc();
     }
 
     private void getCurrency() {
@@ -86,7 +85,6 @@ public class MapsFragment extends Fragment {
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            Toast.makeText(getContext(), String.valueOf(response.body().getCurrencyList().get(i).getRate()), Toast.LENGTH_SHORT).show();
                             valute =response.body().getCurrencyList().get(i).getRate();
                             getConverterCalc();
                         }
@@ -123,10 +121,17 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 myChoose = editText.getText().toString();
-                resultMon = (Double.parseDouble(myChoose) / valute) * secondValute;
-                double output = resultMon;
-                output = Math.round(output * 100.0) / 100.0;
-                result.setText(String.valueOf(output));
+                if (valute==150){
+                    resultMon=Double.parseDouble(myChoose)*valute;
+                    double output = resultMon;
+                    output = Math.round(output * 100.0) / 100.0;
+                    result.setText(String.valueOf(output));
+                }else {
+                    resultMon = (Double.parseDouble(myChoose) / valute) * secondValute;
+                    double output = resultMon;
+                    output = Math.round(output * 100.0) / 100.0;
+                    result.setText(String.valueOf(output));
+                }
             }
         });
     }

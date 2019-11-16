@@ -70,6 +70,7 @@ public class CurrencyExchange {
         currencyList.add(new Currency("EUR", rates.getEUR()));
         currencyList.add(new Currency("FJD", rates.getFJD()));
         currencyList.add(new Currency("FKP", rates.getFKP()));
+        currencyList.add(new Currency("GCN", rates.getGCN()));
         currencyList.add(new Currency("GBP", rates.getGBP()));
         currencyList.add(new Currency("GEL", rates.getGEL()));
         currencyList.add(new Currency("GGP", rates.getGGP()));
@@ -142,6 +143,7 @@ public class CurrencyExchange {
         currencyList.add(new Currency("RSD", rates.getRSD()));
         currencyList.add(new Currency("RUB", rates.getRUB()));
         currencyList.add(new Currency("RWF", rates.getRWF()));
+        currencyList.add(new Currency("SOM", rates.getSOM()));
         currencyList.add(new Currency("SAR", rates.getSAR()));
         currencyList.add(new Currency("SBD", rates.getSBD()));
         currencyList.add(new Currency("SCR", rates.getSCR()));
@@ -435,6 +437,7 @@ public class CurrencyExchange {
         private int EUR;
         private double FJD;
         private double FKP;
+        private double GCN=150;
         private double GBP;
         private double GEL;
         private double GGP;
@@ -502,14 +505,12 @@ public class CurrencyExchange {
         private double PEN;
         private double PGK;
         private double PHP;
-        private double PKR;
-        private double PLN;
-        private double PYG;
         private double QAR;
         private double RON;
         private double RSD;
         private double RUB;
         private double RWF;
+        private double SOM = 76.91;
         private double SAR;
         private double SBD;
         private double SCR;
@@ -658,6 +659,14 @@ public class CurrencyExchange {
 
         public void setBHD(double BHD) {
             this.BHD = BHD;
+        }
+
+        public double getGCN() {
+            return GCN;
+        }
+
+        public void setGCN(double GCN) {
+            this.GCN = GCN;
         }
 
         public double getBIF() {
@@ -1468,30 +1477,6 @@ public class CurrencyExchange {
             this.PHP = PHP;
         }
 
-        public double getPKR() {
-            return PKR;
-        }
-
-        public void setPKR(double PKR) {
-            this.PKR = PKR;
-        }
-
-        public double getPLN() {
-            return PLN;
-        }
-
-        public void setPLN(double PLN) {
-            this.PLN = PLN;
-        }
-
-        public double getPYG() {
-            return PYG;
-        }
-
-        public void setPYG(double PYG) {
-            this.PYG = PYG;
-        }
-
         public double getQAR() {
             return QAR;
         }
@@ -1530,6 +1515,14 @@ public class CurrencyExchange {
 
         public void setRWF(double RWF) {
             this.RWF = RWF;
+        }
+
+        public double getSOM() {
+            return SOM;
+        }
+
+        public void setSOM(double SOM) {
+            this.SOM = SOM;
         }
 
         public double getSAR() {
@@ -1595,6 +1588,7 @@ public class CurrencyExchange {
         public void setSLL(double SLL) {
             this.SLL = SLL;
         }
+
         public double getTHB() {
             return THB;
         }
@@ -1714,6 +1708,7 @@ public class CurrencyExchange {
         public void setXAF(double XAF) {
             this.XAF = XAF;
         }
+
         public double getXAU() {
             return XAU;
         }
@@ -1721,6 +1716,7 @@ public class CurrencyExchange {
         public void setXAU(double XAU) {
             this.XAU = XAU;
         }
+
         public double getXPF() {
             return XPF;
         }

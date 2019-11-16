@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.marveltravel.map.R;
@@ -25,6 +26,9 @@ import com.marveltravel.map.ui.main.WeatherForecastAdapter;
 
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +45,10 @@ public class WeatherForecastFragment extends Fragment {
     private TextView txt_city_name, txt_geo_coord;
     private RecyclerView recycler_forecast;
     private String strText;
-    private  String country="Bishkek";
+    private String country = "Bishkek";
     private static final String TAG = "loge_tag";
+    Unbinder unbinder;
+    ProgressBar progressBar;
 
 
     static WeatherForecastFragment instance;
@@ -64,12 +70,19 @@ public class WeatherForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_wather_forecast, container, false);
+        showProgressBar();
         initView(itemView);
         getCountryText();
         loadText();
         getForecastWeatherInfo();
 //        getInstance();
         return itemView;
+    }
+
+    private void showProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     public void getCountryText() {
@@ -86,6 +99,7 @@ public class WeatherForecastFragment extends Fragment {
     }
 
     public void initView(View view) {
+        progressBar = view.findViewById(R.id.progressBar);
         txt_city_name = view.findViewById(R.id.text_city_name);
         txt_geo_coord = view.findViewById(R.id.text_geo_coord);
         recycler_forecast = view.findViewById(R.id.recyler_forecast);
@@ -103,18 +117,19 @@ public class WeatherForecastFragment extends Fragment {
             ed.putString(SAVE_TEXT, txt_city_name.getText().toString());
             Log.e(TAG, "saveText: " + strText);
             ed.apply();
-            country=strText;
+            country = strText;
         }
     }
 
     private void loadText() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
-        }if (txt_city_name!=null) {
+        }
+        if (txt_city_name != null) {
             String savedText = preferences.getString(SAVE_TEXT, "");
             Log.e(TAG, "loadText: " + savedText);
             txt_city_name.setText(savedText);
-            country=savedText;
+            country = savedText;
         }
     }
 
@@ -152,4 +167,5 @@ public class WeatherForecastFragment extends Fragment {
         super.onDestroy();
         saveText();
     }
+
 }

@@ -39,12 +39,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="600dp"
+            />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="490dp"
-            android:background="#03A9F4"
+            android:background="#05AAF5"
             app:behavior_peekHeight="55dp"
             app:layout_behavior="@string/bottom_sheet_behavior">
             <LinearLayout
@@ -89,12 +97,6 @@
                         android:padding="16dp"
                         android:text="Bishkek" />
                 </LinearLayout>
-<!--                <fragment-->
-<!--                    android:name="com.marveltravel.map.data.entity.weatherforecast.WeatherForecastFragmentFragment"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    tools:layout="@layout/fragment_wather_forecast"-->
-<!--                    />-->
                 <FrameLayout
                     android:id="@+id/container2"
                     android:layout_width="match_parent"
