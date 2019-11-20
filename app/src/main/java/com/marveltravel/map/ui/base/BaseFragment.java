@@ -9,10 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 abstract public class BaseFragment extends Fragment {
+
+    public abstract boolean onMapClick(@NonNull LatLng point);
 
     protected abstract int getViewLayout();
     private Unbinder unbinder;
@@ -30,4 +34,6 @@ abstract public class BaseFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
 }

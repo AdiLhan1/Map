@@ -8,23 +8,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.marveltravel.map.R;
 import com.marveltravel.map.data.entity.currency.CurrencyExchange;
 import com.marveltravel.map.data.entity.currency.SpinnerAdapter;
 import com.marveltravel.map.data.network.RetrofitBuilder;
+import com.marveltravel.map.ui.base.BaseMapFragment;
+
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +33,7 @@ import static com.marveltravel.map.BuildConfig.CURRENCY_KEY;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapsFragment extends Fragment {
+public class MapsFragment extends BaseMapFragment {
     private static final String TAG = "-TAG";
     @BindView(R.id.result_map)
     TextView result;
@@ -56,16 +54,10 @@ public class MapsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    protected int getViewLayout() {
+        return R.layout.fragment_maps;
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,13 +77,13 @@ public class MapsFragment extends Fragment {
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            valute =response.body().getCurrencyList().get(i).getRate();
+                            valute = response.body().getCurrencyList().get(i).getRate();
                             getConverterCalc();
                         }
 
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
-                            Log.e(TAG, "onNothingSelected: " );
+                            Log.e(TAG, "onNothingSelected: ");
 
                         }
                     });
@@ -104,7 +96,7 @@ public class MapsFragment extends Fragment {
 
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
-                            Log.e(TAG, "onNothingSelected: " );
+                            Log.e(TAG, "onNothingSelected: ");
                         }
                     });
                 }
@@ -116,17 +108,18 @@ public class MapsFragment extends Fragment {
             }
         });
     }
+
     private void getConverterCalc() {
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myChoose = editText.getText().toString();
-                if (valute==150){
-                    resultMon=Double.parseDouble(myChoose)*valute;
+                if (valute == 150) {
+                    resultMon = Double.parseDouble(myChoose) * valute;
                     double output = resultMon;
                     output = Math.round(output * 100.0) / 100.0;
                     result.setText(String.valueOf(output));
-                }else {
+                } else {
                     resultMon = (Double.parseDouble(myChoose) / valute) * secondValute;
                     double output = resultMon;
                     output = Math.round(output * 100.0) / 100.0;
@@ -135,4 +128,5 @@ public class MapsFragment extends Fragment {
             }
         });
     }
+
 }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.marveltravel.map.R;
 import com.marveltravel.map.data.entity.weatherforecast.WeatherForecastFragment;
 import com.marveltravel.map.data.entity.wheather.CurrentWeatherEntity;
@@ -121,6 +122,12 @@ public class WeatherCurrentFragment extends BaseFragment {
         openForecast();
     }
 
+
+    @Override
+    public boolean onMapClick(@NonNull LatLng point) {
+        return false;
+    }
+
     @Override
     protected int getViewLayout() {
         return R.layout.fragment_weather;
@@ -214,7 +221,8 @@ public class WeatherCurrentFragment extends BaseFragment {
     private void saveText() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
-        }if (address!=null) {
+        }
+        if (address != null) {
             SharedPreferences.Editor ed = preferences.edit();
             String text = address.getText().toString();
             ed.putString(SAVE_TEXT, text);

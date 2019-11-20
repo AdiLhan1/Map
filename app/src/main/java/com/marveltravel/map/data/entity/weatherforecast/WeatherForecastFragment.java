@@ -85,6 +85,7 @@ public class WeatherForecastFragment extends Fragment {
         }
     }
 
+
     public void getCountryText() {
         Bundle bundle = getArguments();
         if (bundle != null) {
