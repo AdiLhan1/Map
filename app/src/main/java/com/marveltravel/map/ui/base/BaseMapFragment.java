@@ -32,10 +32,14 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.marveltravel.map.R;
+import com.marveltravel.map.utils.PermissionUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,17 +53,17 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.marveltravel.map.BuildConfig.MAP_KEY;
 
-public abstract class BaseMapFragment extends BaseFragment implements OnMapReadyCallback {
+public abstract class BaseMapFragment extends BaseFragment implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
     @BindView(R.id.mapView)
     MapView mapView;
     private MapboxMap mapbox;
     LocationComponent locationComponent;
-    private LocationEngine locationEngine;
+    private Symbol symbol;
+    SymbolManager symbolManager;
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final LatLng locationOne = new LatLng(42.8700000, 74.5900000);
     private static final LatLng locationTwo = new LatLng(25.837058, -106.646234);
-    private LocationManager locationManager;
-    String provider;
 
 
     @Override
@@ -82,14 +86,23 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         mapboxMap.setStyle(Style.SATELLITE_STREETS, style -> {
             mapbox = mapboxMap;
+            symbolManager = new SymbolManager(mapView, mapboxMap,style);
             enableLocationComponent(style);
             addMarkerIconsToMap(style);
-            mapboxMap.addOnMapClickListener((point -> false));
+            mapboxMap.addOnMapClickListener(this);
         });
+    }
+    private void createSymbol(LatLng point){
+        SymbolOptions symbolOptions = new SymbolOptions()
+                .withLatLng(new LatLng(6.687337, 0.381457))
+                .withIconImage("icon-id")
+                .withSymbolSortKey(10.0f);
+        if (symbol!=null) symbolManager.delete(symbol);
+        symbol=symbolManager.create(symbolOptions);
     }
 
     private void addMarkerIconsToMap(@NonNull Style loadedMapStyle) {
-        loadedMapStyle.addImage("icon-id", Objects.requireNonNull(BitmapUtils.getBitmapFromDrawable(
+        loadedMapStyle.addImageAsync("icon-id", Objects.requireNonNull(BitmapUtils.getBitmapFromDrawable(
                 getResources().getDrawable(R.drawable.red_marker))));
 
         loadedMapStyle.addSource(new GeoJsonSource("source-id",
@@ -106,7 +119,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
     }
 
     private void enableLocationComponent(Style style) {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionUtils.isPermissionGranted(getContext())) {
             Toast.makeText(requireContext(), "Вы имеете разрешение", Toast.LENGTH_SHORT).show();
             LocationComponentOptions componentOptions = LocationComponentOptions.builder(requireContext())
                     .elevation(5)
@@ -133,7 +146,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
                     .tilt(20)
                     .build();
             mapbox.setCameraPosition(position);
-//            mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position),7000);
+            mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 7000);
         } else {
             requestAndCheckPermission();
         }
@@ -157,12 +170,12 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
 
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-        LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                .include(locationOne) // Northeast
-                .include(locationTwo) // Southwest
-                .build();
-
-        mapbox.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 50), 5000);
+//        LatLngBounds latLngBounds = new LatLngBounds.Builder()
+//                .include(locationOne) // Northeast
+//                .include(locationTwo) // Southwest
+//                .build();
+        createSymbol(point);
+//        mapbox.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 50), 5000);/**/
         return true;
     }
 
@@ -220,7 +233,8 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
         super.onDestroy();
         if (mapbox != null) {
             mapbox.removeOnMapClickListener(point -> false);
-        }if (mapView!=null) {
+        }
+        if (mapView != null) {
             mapView.onDestroy();
         }
 

@@ -21,13 +21,11 @@ import android.widget.TextView;
 
 import com.marveltravel.map.R;
 import com.marveltravel.map.data.network.RetrofitBuilder;
-import com.marveltravel.map.ui.main.WeatherCurrentFragment;
+import com.marveltravel.map.ui.main.Listener;
 import com.marveltravel.map.ui.main.WeatherForecastAdapter;
 
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
@@ -39,7 +37,7 @@ import static com.marveltravel.map.BuildConfig.WEATHER_KEY;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WeatherForecastFragment extends Fragment {
+public class WeatherForecastFragment extends Fragment implements Listener {
     private static final String SAVE_TEXT = "save_text";
     private CompositeDisposable compositeDisposable;
     private TextView txt_city_name, txt_geo_coord;
@@ -47,6 +45,7 @@ public class WeatherForecastFragment extends Fragment {
     private String strText;
     private String country = "Bishkek";
     private static final String TAG = "loge_tag";
+    private WeatherForecastAdapter adapter;
     Unbinder unbinder;
     ProgressBar progressBar;
 
@@ -60,6 +59,9 @@ public class WeatherForecastFragment extends Fragment {
         return instance;
         // Required empty public constructor
     }
+    private void initAdapter(){
+        adapter=new WeatherForecastAdapter(this);
+    }
 
     public WeatherForecastFragment() {
         compositeDisposable = new CompositeDisposable();
@@ -70,13 +72,19 @@ public class WeatherForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_wather_forecast, container, false);
-        showProgressBar();
         initView(itemView);
+//        getInstance();
+        return itemView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initAdapter();
+        showProgressBar();
         getCountryText();
         loadText();
         getForecastWeatherInfo();
-//        getInstance();
-        return itemView;
     }
 
     private void showProgressBar() {
@@ -158,9 +166,12 @@ public class WeatherForecastFragment extends Fragment {
         txt_city_name.setText(country);
         txt_geo_coord.setText(new StringBuilder("[").append(weatherEntity.city.coord + "]"));
 //        weatherEntity.list.get(0).rain
-
-        WeatherForecastAdapter adapter = new WeatherForecastAdapter(weatherEntity);
+        adapter.update(weatherEntity.list);
         recycler_forecast.setAdapter(adapter);
+    }
+    @Override
+    public void onItemClick(MyList item) {
+        //startActivity();
     }
 
     @Override
