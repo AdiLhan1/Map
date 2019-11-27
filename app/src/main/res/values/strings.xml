@@ -44,4 +44,5 @@
     <string name="_4">-4</string>
     <string name="max1">max</string>
     <string name="min1">min</string>
+    <string name="start_navigating">Start Navigating</string>
 </resources>

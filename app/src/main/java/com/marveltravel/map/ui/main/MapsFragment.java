@@ -22,6 +22,8 @@ import com.marveltravel.map.data.network.RetrofitBuilder;
 import com.marveltravel.map.ui.base.BaseMapFragment;
 
 
+import java.util.List;
+
 import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;

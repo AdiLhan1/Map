@@ -2,6 +2,8 @@ package com.marveltravel.map;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDex;
+
 import com.mapbox.mapboxsdk.Mapbox;
 import com.marveltravel.map.data.SharedPreferencesHelper;
 
@@ -14,8 +16,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         preferencesHelper = new SharedPreferencesHelper(this);
-
+        MultiDex.install(this);
     }
+
 
     public static SharedPreferencesHelper getPreferences() {
         return preferencesHelper;
