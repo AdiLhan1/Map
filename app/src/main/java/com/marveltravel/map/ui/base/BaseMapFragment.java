@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,9 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Feature;
@@ -222,8 +226,15 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
         }
         destinationMarker = mapbox.addMarker(new MarkerOptions().position(point));
         Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-                locationComponent.getLastKnownLocation().getLatitude());
+
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            Point originPoint = Point.fromLngLat(location.getLongitude(),
+                    location.getLatitude());
+            getRoute(originPoint, destinationPoint);
+        });
+
+
+
         if (animator != null && animator.isStarted()) {
             currentPosition = (LatLng) animator.getAnimatedValue();
             animator.cancel();
@@ -232,7 +243,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
         animator = ObjectAnimator
                 .ofObject(latLngEvaluator, currentPosition, point)
                 .setDuration(1500);
-        animator.addUpdateListener(animatorUpdateListener);
+//        animator.addUpdateListener(animatorUpdateListener);
         animator.start();
 
         currentPosition = point;
@@ -246,7 +257,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
 
         mapbox.animateCamera(CameraUpdateFactory
                 .newCameraPosition(position), 7000);
-        getRoute(originPoint, destinationPoint);
+
         startButton.setEnabled(true);
         startButton.setBackgroundResource(R.color.mapbox_blue);
 //        LatLngBounds latLngBounds = new LatLngBounds.Builder()
@@ -295,14 +306,14 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
                 });
     }
 
-    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
-            new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    LatLng animatedPosition = (LatLng) valueAnimator.getAnimatedValue();
-                    geoJsonSource.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
-                }
-            };
+//    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
+//            new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                    LatLng animatedPosition = (LatLng) valueAnimator.getAnimatedValue();
+//                    geoJsonSource.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
+//                }
+//            };
 
     // Class is used to interpolate the marker animation.
     private static final TypeEvaluator<LatLng> latLngEvaluator = new TypeEvaluator<LatLng>() {
